@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITEC 23 Digital Portfolio - Daxton Jersield D. Tabuan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1f2937', // Dark gray
+                        secondary: '#6b7280', // Mid gray
+                        accent: '#d1d5db', // Light gray
+                        dark: '#111827', // Near black
+                        light: '#f9fafb', // Near white
+                        indigo: '#4b5563', // Subtle indigo
+                        silver: '#e5e7eb', // Soft silver
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+                    },
+                },
+            },
+        };
+    </script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 80%, #d1d5db 100%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.dark-mode {
+            background: linear-gradient(180deg, #1f2937 0%, #4b5563 80%, #111827 100%);
+            color: #f9fafb;
+        }
+        body.dark-mode .card {
+            background: rgba(31, 41, 55, 0.85);
+            color: #f9fafb;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-mode .text-primary {
+            color: #f9fafb;
+        }
+        body.dark-mode .text-base {
+            color: #a0aec0;
+        }
+        body.dark-mode .quote {
+            background: #4b5563;
+            border-left-color: #d1d5db;
+        }
+        body.dark-mode .text-gray-600 {
+            color: #d1d5db;
+        }
+        body.dark-mode .mobile-menu {
+            background: rgba(31, 41, 55, 0.95);
+        }
+        .navbar {
+            transition: all 0.3s ease;
+            background: rgba(31, 41, 55, 0.9);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(209, 213, 219, 0.2);
+        }
+        .navbar.sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .nav-link:hover {
+            transform: scale(1.05);
+            color: #d1d5db;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #d1d5db;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.9), rgba(107, 114, 128, 0.7)), url('https://comma-soft.com/wp-content/uploads/resized/2022/02/Header_Blog_AI-1280x635-c-default.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(209, 213, 219, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: particles 20s linear infinite;
+            z-index: 0;
+        }
+        @keyframes particles {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%23f9fafb" fill-opacity="1" d="M0,96L80,112C160,128,320,160,480,160C640,160,800,128,960,112C1120,96,1280,96,1360,96L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"%3E%3C/path%3E%3C/svg%3E');
+            background-size: cover;
+        }
+        body.dark-mode .hero::after {
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%231f2937" fill-opacity="1" d="M0,96L80,112C160,128,320,160,480,160C640,160,800,128,960,112C1120,96,1280,96,1360,96L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,0,320Z"%3E%3C/path%3E%3C/svg%3E');
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .image-reveal {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .image-reveal.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(209, 213, 219, 0.3);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+        .quote {
+            border-left: 4px solid #d1d5db;
+            padding: 1.25rem 1.5rem;
+            background: #f9fafb;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        #toc-sidebar {
+            position: sticky;
+            top: 120px;
+            z-index: 10;
+        }
+        .toc-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .toc-link.current {
+            color: #f9fafb !important; /* Ensure color applies with high specificity */
+            font-weight: bold;
+        }
+        body.dark-mode .toc-link.current {
+            color: #f9fafb !important; /* Ensure visibility in dark mode */
+        }
+        .toc-link:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 20;
+        }
+        #progress-circle {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            z-index: 110;
+        }
+        #back-to-top, #dark-mode-toggle {
+            position: fixed;
+            background: #1f2937;
+            color: #f9fafb;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        #dark-mode-toggle {
+            bottom: 150px;
+            right: 30px;
+            z-index: 120;
+        }
+        #back-to-top {
+            bottom: 20px;
+            right: 30px;
+            display: none;
+        }
+        #back-to-top:hover, #dark-mode-toggle:hover {
+            background: #6b7280;
+            transform: scale(1.1);
+        }
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(-10px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 0;
+        }
+        .mobile-menu.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mobile-menu a {
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #d1d5db;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 1000;
+            opacity: 0.5;
+        }
+        body.dark-mode .cursor-trail {
+            background: #6b7280;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu {
+                position: static;
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+                background: none;
+                -webkit-backdrop-filter: blur(15px);
+                backdrop-filter: none;
+                flex-direction: row;
+                padding: 0;
+            }
+            .mobile-menu a {
+                padding: 0;
+                text-align: left;
+            }
+            #menu-toggle {
+                display: none;
+            }
+            #toc-sidebar {
+                display: block;
+            }
+        }
+        @media (max-width: 767px) {
+            #toc-sidebar {
+                display: none;
+            }
+            .hero {
+                padding: 5rem 0;
+            }
+            h1 {
+                font-size: 2.25rem;
+            }
+            h2 {
+                font-size: 1.75rem;
+            }
+            h3 {
+                font-size: 1.25rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+            .quote {
+                padding: 1rem;
+            }
+        }
+        [tabindex="0"]:focus, a:focus-visible, button:focus-visible {
+            outline: 2px solid #d1d5db;
+            outline-offset: 3px;
+        }
+        h2 {
+            font-weight: 800;
+        }
+        h3 {
+            font-weight: 700;
+        }
+        /* Hamburger to X animation */
+        #menu-toggle .hamburger {
+            display: block;
+        }
+        #menu-toggle .close {
+            display: none;
+        }
+        #menu-toggle.open .hamburger {
+            display: none;
+        }
+        #menu-toggle.open .close {
+            display: block;
+        }
+        #menu-toggle svg {
+            transition: transform 0.3s ease;
+        }
+        #menu-toggle.open svg {
+            transform: rotate(180deg);
+        }
+        /* Ensure circular images maintain aspect ratio */
+        .circular-image {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+    <!-- Cursor Trail -->
+    <div class="cursor-trail"></div>
+
+    <!-- Scroll Progress Circle -->
+    <svg id="progress-circle" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#d1d5db" stroke-width="5"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#1f2937" stroke-width="5" stroke-linecap="round" id="progress-path"/>
+    </svg>
+
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+        <svg id="dark-mode-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar py-4" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" class="text-2xl md:text-3xl font-extrabold text-light tracking-tight">ITEC 23 Portfolio</a>
+            <button id="menu-toggle" class="md:hidden text-light focus:outline-none" aria-label="Toggle menu" aria-expanded="false">
+                <span class="hamburger">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </span>
+                <span class="close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </span>
+            </button>
+            <div class="mobile-menu md:flex md:space-x-8" id="nav-menu">
+                <a href="#about" class="nav-link block text-light hover:text-accent" aria-label="About Me">About Me</a>
+                <a href="#introduction" class="nav-link block text-light hover:text-accent" aria-label="Introduction">Introduction</a>
+                <a href="#objectives" class="nav-link block text-light hover:text-accent" aria-label="Objectives">Objectives</a>
+                <a href="#reflection" class="nav-link block text-light hover:text-accent" aria-label="Reflection">Reflection</a>
+                <a href="#case-study" class="nav-link block text-light hover:text-accent" aria-label="Case Study">Case Study</a>
+                <a href="#pledge" class="nav-link block text-light hover:text-accent" aria-label="Ethics Pledge">Ethics Pledge</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero text-light py-28 text-center" role="banner" id="hero">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">ITEC 23: Social & Professional Issues in IT</h1>
+            <p class="text-lg md:text-xl font-light">A Digital Portfolio by Daxton Jersield D. Tabuan, BSIT 3rd Year</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row gap-8">
+        <!-- Table of Contents Sidebar (Desktop) -->
+        <aside id="toc-sidebar" class="hidden md:block w-full md:w-1/4">
+            <div class="card p-6 sticky top-24">
+                <h2 class="text-2xl font-bold text-primary mb-6">Table of Contents</h2>
+                <ul class="space-y-4 text-base" id="toc-list">
+                    <li><a href="#about" class="toc-link text-secondary hover:underline" data-tooltip="About Me" aria-label="About Me link">1. About Me</a></li>
+                    <li><a href="#introduction" class="toc-link text-secondary hover:underline" data-tooltip="Introduction" aria-label="Introduction link">2. Introduction</a></li>
+                    <li><a href="#objectives" class="toc-link text-secondary hover:underline" data-tooltip="Objectives" aria-label="Objectives link">3. Objectives</a></li>
+                    <li><a href="#reflection" class="toc-link text-secondary hover:underline" data-tooltip="Reflection" aria-label="Reflection link">4. Reflection</a></li>
+                    <li><a href="#case-study" class="toc-link text-secondary hover:underline" data-tooltip="Case Study Analyses" aria-label="Case Study link">5. Case Study Analyses</a></li>
+                    <li><a href="#pledge" class="toc-link text-secondary hover:underline" data-tooltip="Professional Ethics Pledge" aria-label="Ethics Pledge link">6. Professional Ethics Pledge</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Sections -->
+        <main class="w-full md:w-3/4">
+            <!-- Table of Contents (Mobile) -->
+            <div class="card p-6 mb-8 md:hidden fade-in" id="toc">
+                <h2 class="text-3xl font-bold text-primary mb-6">Table of Contents</h2>
+                <ul class="grid grid-cols-1 gap-4 text-base">
+                    <li><a href="#about" class="toc-link text-secondary hover:underline" data-tooltip="About Me" aria-label="About Me link">About Me</a></li>
+                    <li><a href="#introduction" class="toc-link text-secondary hover:underline" data-tooltip="Introduction" aria-label="Introduction link">Introduction</a></li>
+                    <li><a href="#objectives" class="toc-link text-secondary hover:underline" data-tooltip="Objectives" aria-label="Objectives link">Objectives</a></li>
+                    <li><a href="#reflection" class="toc-link text-secondary hover:underline" data-tooltip="Reflection" aria-label="Reflection link">Reflection</a></li>
+                    <li><a href="#case-study" class="toc-link text-secondary hover:underline" data-tooltip="Case Study Analyses" aria-label="Case Study link">Case Study Analyses</a></li>
+                    <li><a href="#pledge" class="toc-link text-secondary hover:underline" data-tooltip="Professional Ethics Pledge" aria-label="Ethics Pledge link">Professional Ethics Pledge</a></li>
+                </ul>
+            </div>
+
+            <!-- About Me -->
+            <section class="fade-in mb-12" id="about" aria-labelledby="about-heading">
+                <h2 id="about-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">About Me</h2>
+                <div class="card p-6 md:p-8">
+                    <img src="./profile.jpg" class="w-full rounded-full shadow-lg image-reveal lazy circular-image" alt="Daxton Tabuan Profile Image" loading="lazy">
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">I am Daxton Jersield D. Tabuan, a 3rd-year Bachelor of Science in Information Technology (BSIT) student with a deep passion for leveraging technology to address societal challenges. My academic journey in IT has been driven by a commitment to understanding the intersection of technology, ethics, and social responsibility, which I explore through this ITEC 23 portfolio.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">With a focus on cybersecurity, data privacy, and software development, I aim to contribute to the IT industry by developing innovative solutions that prioritize user trust and inclusivity. My coursework in ITEC 23 has equipped me with critical analytical skills and ethical frameworks that guide my approach to professional practice.</p>
+                </div>
+            </section>
+
+            <!-- Introduction -->
+            <section class="fade-in mb-12" id="introduction" aria-labelledby="introduction-heading">
+                <h2 id="introduction-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">Introduction</h2>
+                <div class="card p-6 md:p-8">
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">As a 3rd-year BSIT student, ITEC 23: Social and Professional Issues in IT has profoundly shaped my understanding of the ethical and societal dimensions of technology. This course has ignited my passion for exploring critical issues such as data privacy, cybersecurity ethics, and the responsible use of artificial intelligence, challenging me to balance technological innovation with moral accountability.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">The ethical dilemmas surrounding data breaches and misinformation resonate deeply with me, highlighting the erosion of user trust due to negligence or malicious intent. Through rigorous coursework and case studies, I have developed a commitment to championing ethical IT practices that prioritize transparency, security, and societal good. This portfolio serves as a testament to my academic growth and dedication to becoming a responsible IT professional.</p>
+                    <div class="quote text-gray-600 italic p-4 my-6">"Technology is a tool, but ethics is its guide." – Adapted from Cathy O’Neil</div>
+                    <img src="https://www.shutterstock.com/image-vector/ai-ethics-law-regulation-artificial-600nw-2303132689.jpg" class="w-full rounded-lg shadow-lg image-reveal lazy" alt="Cybersecurity Ethics Image" loading="lazy">
+                </div>
+            </section>
+
+            <!-- Objectives -->
+            <section class="fade-in mb-12" id="objectives" aria-labelledby="objectives-heading">
+                <h2 id="objectives-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">Objectives</h2>
+                <div class="card p-6 md:p-8">
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">This digital portfolio aims to demonstrate my comprehensive understanding of the social and professional issues in IT, as explored in ITEC 23. My objectives are:</p>
+                    <ul class="list-disc pl-6 text-base md:text-lg mb-4 leading-relaxed">
+                        <li>Showcase my ability to critically analyze ethical challenges in IT, such as data breaches and social engineering attacks, using established ethical theories.</li>
+                        <li>Reflect on my academic and personal growth, articulating how this course has shaped my professional ethos.</li>
+                        <li>Propose actionable, ethics-driven solutions to real-world IT challenges, emphasizing user trust, privacy, and inclusivity.</li>
+                        <li>Establish my commitment to upholding ethical standards in my future career as an IT professional, grounded in principles of integrity and accountability.</li>
+                    </ul>
+                    <p class="text-base md:text-lg leading-relaxed">By achieving these objectives, I aim to present a professional portfolio that reflects my readiness to contribute meaningfully to the IT industry.</p>
+                </div>
+            </section>
+
+            <!-- Reflection -->
+            <section class="fade-in mb-12" id="reflection" aria-labelledby="reflection-heading">
+                <h2 id="reflection-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">Reflection</h2>
+                <div class="card p-6 md:p-8">
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">ITEC 23 has been a pivotal course in my academic journey, offering deep insights into the ethical complexities of information technology. Analyzing case studies, such as the ILOVEYOU worm, has illuminated the devastating impact of unethical practices, such as social engineering and malware distribution, on global trust and economic stability. These discussions emphasized the critical role of proactive security measures and ethical decision-making in mitigating harm.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">This course has shaped my professional ethos by fostering empathy, accountability, and a commitment to inclusivity. I have learned to apply ethical frameworks like deontology, which emphasizes duty, and virtue ethics, which focuses on character, to navigate complex IT scenarios. For example, I now prioritize transparent data practices and user-centric design to ensure technology serves diverse populations equitably.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">As a BSIT student, I am motivated to advocate for robust cybersecurity policies and ethical coding standards in my future career. My goal is to contribute to an IT landscape that empowers users while safeguarding their rights, guided by the lessons learned in ITEC 23.</p>
+                    <img src="https://mahrp.org/wp-content/uploads/2024/07/ETHICAL-WORK-1024x676.png" class="w-full rounded-lg shadow-lg image-reveal" alt="Ethical IT Practices Image" />
+                </div>
+            </section>
+
+            <!-- Case Study Analyses -->
+            <section class="fade-in mb-12" id="case-study" aria-labelledby="case-study-heading">
+                <h2 id="case-study-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">Case Study Analyses</h2>
+                <div class="card p-6 md:p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-primary mb-4">Summary of the Incident</h3>
+                    <p class="text-base md:text-lg leading-relaxed">On May 4, 2000, the ILOVEYOU worm, created by Onel de Guzman in the Philippines, emerged as one of the most destructive cyberattacks in history. Distributed via email with the subject "ILOVEYOU" and an attachment named "LOVE-LETTER-FOR-YOU.TXT.vbs," the worm exploited a Windows vulnerability that hid file extensions, deceiving users into executing a malicious Visual Basic Script (VBS). It infected millions of computers within hours, overwriting files, stealing passwords, and self-propagating by emailing itself to all contacts in the victim's Microsoft Outlook address book.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">The worm caused an estimated $5.5–15 billion in damages, affecting approximately 10% of internet-connected computers globally. Major organizations, including the Pentagon, Ford Motor Company, and the British Parliament, were forced to shut down email servers to contain the outbreak. The absence of robust cybersecurity laws in the Philippines at the time prevented legal consequences for de Guzman, underscoring global disparities in cybercrime legislation.</p>
+                    <img data-src="https://cyberhoot.com/wp-content/uploads/2020/02/Screen-Shot-2017-11-06-at-11.34.12-PM.png" class="w-full rounded-lg shadow-lg mt-4 image-reveal lazy" alt="ILOVEYOU Worm Image" loading="lazy">
+                </div>
+                <div class="card p-6 md:p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-primary mb-4">Ethical Issues Involved</h3>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">The ILOVEYOU worm raises critical ethical concerns due to its exploitation of human trust through social engineering. By masquerading as a romantic message, it violated user consent and privacy, manipulating psychological vulnerabilities to propagate harm. De Guzman’s intent was to steal internet credentials for personal gain, which demonstrated a lack of respect for the broader consequences of data loss, system downtime, and financial devastation experienced by individuals and organizations worldwide.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">From a stakeholder perspective, the incident exposed the ethical responsibilities of software developers (e.g., Microsoft), who failed to address known vulnerabilities, and governments, which lacked adequate cybersecurity regulations. Modern parallels, such as phishing campaigns and ransomware, highlight the ongoing relevance of this case, emphasizing the need for ethical accountability in IT development and user education to prevent similar trust violations.</p>
+                </div>
+                <div class="card p-6 md:p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-primary mb-4">Applying Ethical Theories</h3>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed"><strong>Deontology:</strong> From a deontological perspective, de Guzman’s actions violated fundamental ethical duties, such as respecting others’ autonomy and property rights. Creating and releasing malware without consent breached the categorical imperative to treat others as ends in themselves, not means to personal gain. The resulting harm—data destruction and economic losses—violated the duty to do no harm, as outlined by Kantian ethics.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed"><strong>Virtue Ethics:</strong> Virtue ethics critiques de Guzman’s lack of integrity, responsibility, and empathy. A virtuous IT professional would prioritize user trust and system reliability, fostering a culture of ethical development over malicious intent. De Guzman’s deceptive tactics reflect a failure to embody virtues essential for responsible technology creation, as advocated by Aristotelian ethics.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed"><strong>Utilitarianism:</strong> Utilitarianism evaluates actions based on their consequences, seeking to maximize overall happiness. De Guzman’s worm caused widespread harm, outweighing any minimal personal benefit (e.g., free internet access). The global disruption and financial losses underscore the unethical nature of his actions, which failed to promote the greatest good for the greatest number, per Bentham’s utilitarian principles.</p>
+                </div>
+                <div class="card p-6 md:p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-primary mb-4">Proposed Ethical Solutions</h3>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">To prevent similar incidents, organizations must deploy advanced cybersecurity measures, including email filters with machine learning algorithms to detect malicious attachments and sandbox environments for safe file execution. Regular software updates and patch management are essential to address vulnerabilities, such as those exploited by the ILOVEYOU worm’s hidden file extensions.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">User education programs should focus on recognizing phishing and social engineering tactics, empowering individuals to make informed decisions. Governments must enact and enforce comprehensive cybersecurity laws, such as the Philippines’ Cybercrime Prevention Act of 2012, to ensure accountability and deter cybercrimes. Developers should adhere to ethical coding standards, such as those outlined by the IEEE Code of Ethics, prioritizing user safety, transparency, and privacy.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">Additionally, fostering a culture of ethical responsibility within the IT industry requires collaboration among academia, industry, and policymakers to promote ethical guidelines and certifications. By integrating these solutions, we can mitigate the risks of unethical technology use and build a more secure, trustworthy digital ecosystem.</p>
+                    <div class="quote text-gray-600 italic p-4 my-6">"Ethics is not a luxury but a cornerstone of sustainable technology." – Adapted from Cathy O’Neil</div>
+                </div>
+            </section>
+
+            <!-- Professional Ethics Pledge -->
+            <section class="fade-in mb-12" id="pledge" aria-labelledby="pledge-heading">
+                <h2 id="pledge-heading" class="text-3xl md:text-4xl font-bold text-primary mb-6">Professional Ethics Pledge</h2>
+                <div class="card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-primary mb-4">My Ethical Oath</h3>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">As a 3rd-year BSIT student and aspiring IT professional, I, Daxton Jersield D. Tabuan, solemnly pledge to uphold the following ethical principles in my academic and professional endeavors:</p>
+                    <ul class="list-disc pl-6 text-base md:text-lg mb-6 leading-relaxed">
+                        <li><strong>Uphold Integrity:</strong> Act with honesty and transparency in all technological endeavors, ensuring ethical data practices and system design align with industry standards.</li>
+                        <li><strong>Protect Privacy:</strong> Safeguard user data through robust encryption, compliance with privacy regulations (e.g., GDPR, Data Privacy Act of 2012), and user-centric security measures.</li>
+                        <li><strong>Foster Inclusivity:</strong> Design and advocate for technology that addresses diverse user needs, promoting accessibility and equity in digital environments.</li>
+                        <li><strong>Pursue Continuous Learning:</strong> Commit to lifelong learning to stay abreast of technological advancements and evolving ethical challenges in IT.</li>
+                        <li><strong>Promote Accountability:</strong> Take responsibility for the societal impacts of my work, ensuring technology serves as a force for good and fosters trust among stakeholders.</li>
+                    </ul>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed"><strong>Why Each Element Matters:</strong></p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed"><strong>Integrity</strong> forms the foundation of trust, ensuring ethical practices in data handling and system development. <strong>Privacy</strong> protects users from cyber threats, fostering confidence in technology. <strong>Inclusivity</strong> bridges digital divides, ensuring equitable access for all. <strong>Continuous learning</strong> equips me to address emerging ethical dilemmas, while <strong>accountability</strong> reinforces my responsibility to society and the profession.</p>
+                    <p class="text-base md:text-lg mb-4 leading-relaxed">This pledge reflects my commitment to embodying the principles learned in ITEC 23, guiding my path toward a career that balances innovation with ethical responsibility.</p>
+                    <div class="quote text-gray-600 italic p-4 my-6">"In the digital age, ethics is the compass for technology." – Adapted from Cathy O’Neil</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-6 text-center" role="contentinfo">
+        <p>© 2025 Daxton Jersield D. Tabuan. All rights reserved.</p>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                if (window.innerWidth < 768) {
+                    const navMenu = document.getElementById('nav-menu');
+                    const menuToggle = document.getElementById('menu-toggle');
+                    navMenu.classList.remove('open');
+                    menuToggle.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
+        // Sticky navbar
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('sticky');
+            } else {
+                navbar.classList.remove('sticky');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = navMenu.classList.toggle('open');
+            menuToggle.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const darkModeIcon = document.getElementById('dark-mode-icon');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            darkModeIcon.innerHTML = document.body.classList.contains('dark-mode')
+                ? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`
+                : `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`;
+        });
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`;
+        }
+
+        // Fade-in animation on scroll with stagger
+        const faders = document.querySelectorAll('.fade-in, .image-reveal');
+        const appearOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        const appearOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+        faders.forEach(fader => appearOnScroll.observe(fader));
+
+        // Scroll progress circle
+        const progressPath = document.getElementById('progress-path');
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (scrollPercent / 100) * circumference;
+            progressPath.style.strokeDasharray = `${circumference} ${circumference}`;
+            progressPath.style.strokeDashoffset = offset;
+        });
+
+        // Back to Top button visibility
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'flex';
+                backToTop.style.opacity = '1';
+            } else {
+                backToTop.style.opacity = '0';
+                setTimeout(() => {
+                    backToTop.style.display = 'none';
+                }, 300);
+            }
+        });
+        backToTop.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Lazy load images
+        const lazyImages = document.querySelectorAll('img.lazy');
+        const lazyLoad = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.remove('lazy');
+                    observer.unobserve(img);
+                }
+            });
+        });
+        lazyImages.forEach(img => lazyLoad.observe(img));
+
+        // Keyboard navigation support
+        document.querySelectorAll('.nav-link, .toc-link').forEach(link => {
+            link.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Cursor trail effect
+        const cursorTrail = document.querySelector('.cursor-trail');
+        let trailTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(trailTimeout);
+            cursorTrail.style.display = 'block';
+            cursorTrail.style.left = `${e.clientX - 4}px`;
+            cursorTrail.style.top = `${e.clientY - 4}px`;
+            cursorTrail.style.opacity = '0.5';
+            trailTimeout = setTimeout(() => {
+                cursorTrail.style.opacity = '0';
+            }, 1000);
+        });
+        document.addEventListener('mouseleave', () => {
+            cursorTrail.style.opacity = '0';
+        });
+
+        // TOC section tracking
+        const sections = document.querySelectorAll('#hero, section');
+        const tocLinks = document.querySelectorAll('#toc-list .toc-link');
+        const observerOptions = {
+            threshold: 0.3, // Trigger when 30% of the section is visible
+            rootMargin: '0px 0px -60% 0px' // Adjust to trigger earlier as section enters viewport
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    // If hero is in view, remove all highlights
+                    if (id === 'hero') {
+                        tocLinks.forEach(link => link.classList.remove('current'));
+                        return;
+                    }
+                    // Otherwise, highlight the corresponding section link
+                    const tocLink = document.querySelector(`#toc-list a[href="#${id}"]`);
+                    if (tocLink) {
+                        tocLinks.forEach(link => link.classList.remove('current'));
+                        tocLink.classList.add('current');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
