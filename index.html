@@ -180,15 +180,7 @@
             z-index: 10;
         }
         .toc-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        .toc-link.current {
-            color: #f9fafb !important;
-            font-weight: bold;
-        }
-        body.dark-mode .toc-link.current {
-            color: #f9fafb !important;
+            position: other;
         }
         .toc-link:hover::after {
             content: attr(data-tooltip);
@@ -407,7 +399,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="hero text-light py-28 text-center" role="banner" id="hero">
+    <div class="hero text-light py-28 text-center" role="banner">
         <div class="container mx-auto px-4">
             <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">ITEC 23: Social & Professional Issues in IT</h1>
             <p class="text-lg md:text-xl font-light">A Digital Portfolio by Daxton Jersield D. Tabuan, BSIT 3rd Year</p>
@@ -420,13 +412,13 @@
         <aside id="toc-sidebar" class="hidden md:block w-full md:w-1/4">
             <div class="card p-6 sticky top-24">
                 <h2 class="text-2xl font-bold text-primary mb-6">Table of Contents</h2>
-                <ul class="space-y-4 text-base" id="toc-list">
-                    <li><a href="#about" class="toc-link text-secondary hover:underline" data-tooltip="About Me" aria-label="About Me link">1. About Me</a></li>
-                    <li><a href="#introduction" class="toc-link text-secondary hover:underline" data-tooltip="Introduction" aria-label="Introduction link">2. Introduction</a></li>
-                    <li><a href="#objectives" class="toc-link text-secondary hover:underline" data-tooltip="Objectives" aria-label="Objectives link">3. Objectives</a></li>
-                    <li><a href="#reflection" class="toc-link text-secondary hover:underline" data-tooltip="Reflection" aria-label="Reflection link">4. Reflection</a></li>
-                    <li><a href="#case-study" class="toc-link text-secondary hover:underline" data-tooltip="Case Study Analyses" aria-label="Case Study link">5. Case Study Analyses</a></li>
-                    <li><a href="#pledge" class="toc-link text-secondary hover:underline" data-tooltip="Professional Ethics Pledge" aria-label="Ethics Pledge link">6. Professional Ethics Pledge</a></li>
+                <ul class="space-y-4 text-base">
+                    <li><a href="#about" class="text-secondary hover:underline" aria-label="Introduction link">1. About Me</a></li>
+                    <li><a href="#introduction" class="text-secondary hover:underline" aria-label="Introduction link">2. Introduction</a></li>
+                    <li><a href="#objectives" class="text-secondary hover:underline" aria-label="Objectives link">3. Objectives</a></li>
+                    <li><a href="#reflection" class="text-secondary hover:underline" aria-label="Reflection link">4. Reflection</a></li>
+                    <li><a href="#case-study" class="text-secondary hover:underline" aria-label="Case Study link">5. Case Study Analyses</a></li>
+                    <li><a href="#pledge" class="text-secondary hover:underline" aria-label="Ethics Pledge link">6. Professional Ethics Pledge</a></li>
                 </ul>
             </div>
         </aside>
@@ -696,70 +688,6 @@
         });
         document.addEventListener('mouseleave', () => {
             cursorTrail.style.opacity = '0';
-        });
-
-        // TOC section tracking
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('#hero, section');
-            const tocLinks = document.querySelectorAll('#toc-list .toc-link');
-            const observerOptions = {
-                threshold: 0.1, // Trigger when 10% of the section is visible
-                rootMargin: '0px 0px -80% 0px' // Adjust to prioritize the section at the top
-            };
-
-            const sectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        if (id === 'hero') {
-                            tocLinks.forEach(link => link.classList.remove('current'));
-                            return;
-                        }
-                        const tocLink = document.querySelector(`#toc-list a[href="#${id}"]`);
-                        if (tocLink) {
-                            tocLinks.forEach(link => link.classList.remove('current'));
-                            tocLink.classList.add('current');
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            // Re-observe sections after images load to handle layout shifts
-            const images = document.querySelectorAll('img');
-            let imagesLoaded = 0;
-            const totalImages = images.length;
-
-            const setupObserver = () => {
-                sections.forEach(section => {
-                    sectionObserver.observe(section);
-                });
-            };
-
-            if (totalImages === 0) {
-                setupObserver();
-            } else {
-                images.forEach(img => {
-                    img.addEventListener('load', () => {
-                        imagesLoaded++;
-                        if (imagesLoaded === totalImages) {
-                            setupObserver();
-                        }
-                    });
-                    img.addEventListener('error', () => {
-                        imagesLoaded++;
-                        if (imagesLoaded === totalImages) {
-                            setupObserver();
-                        }
-                    });
-                });
-            }
-
-            // Fallback in case images don't load within 5 seconds
-            setTimeout(() => {
-                if (imagesLoaded < totalImages) {
-                    setupObserver();
-                }
-            }, 5000);
         });
     </script>
 </body>
