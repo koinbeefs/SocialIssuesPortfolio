@@ -184,11 +184,11 @@
             transition: color 0.3s ease;
         }
         .toc-link.current {
-            color: #f9fafb !important; /* Ensure color applies with high specificity */
+            color: #f9fafb !important;
             font-weight: bold;
         }
         body.dark-mode .toc-link.current {
-            color: #f9fafb !important; /* Ensure visibility in dark mode */
+            color: #f9fafb !important;
         }
         .toc-link:hover::after {
             content: attr(data-tooltip);
@@ -699,34 +699,67 @@
         });
 
         // TOC section tracking
-        const sections = document.querySelectorAll('#hero, section');
-        const tocLinks = document.querySelectorAll('#toc-list .toc-link');
-        const observerOptions = {
-            threshold: 0.3, // Trigger when 30% of the section is visible
-            rootMargin: '0px 0px -60% 0px' // Adjust to trigger earlier as section enters viewport
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('#hero, section');
+            const tocLinks = document.querySelectorAll('#toc-list .toc-link');
+            const observerOptions = {
+                threshold: 0.1, // Trigger when 10% of the section is visible
+                rootMargin: '0px 0px -80% 0px' // Adjust to prioritize the section at the top
+            };
 
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    // If hero is in view, remove all highlights
-                    if (id === 'hero') {
-                        tocLinks.forEach(link => link.classList.remove('current'));
-                        return;
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        if (id === 'hero') {
+                            tocLinks.forEach(link => link.classList.remove('current'));
+                            return;
+                        }
+                        const tocLink = document.querySelector(`#toc-list a[href="#${id}"]`);
+                        if (tocLink) {
+                            tocLinks.forEach(link => link.classList.remove('current'));
+                            tocLink.classList.add('current');
+                        }
                     }
-                    // Otherwise, highlight the corresponding section link
-                    const tocLink = document.querySelector(`#toc-list a[href="#${id}"]`);
-                    if (tocLink) {
-                        tocLinks.forEach(link => link.classList.remove('current'));
-                        tocLink.classList.add('current');
-                    }
+                });
+            }, observerOptions);
+
+            // Re-observe sections after images load to handle layout shifts
+            const images = document.querySelectorAll('img');
+            let imagesLoaded = 0;
+            const totalImages = images.length;
+
+            const setupObserver = () => {
+                sections.forEach(section => {
+                    sectionObserver.observe(section);
+                });
+            };
+
+            if (totalImages === 0) {
+                setupObserver();
+            } else {
+                images.forEach(img => {
+                    img.addEventListener('load', () => {
+                        imagesLoaded++;
+                        if (imagesLoaded === totalImages) {
+                            setupObserver();
+                        }
+                    });
+                    img.addEventListener('error', () => {
+                        imagesLoaded++;
+                        if (imagesLoaded === totalImages) {
+                            setupObserver();
+                        }
+                    });
+                });
+            }
+
+            // Fallback in case images don't load within 5 seconds
+            setTimeout(() => {
+                if (imagesLoaded < totalImages) {
+                    setupObserver();
                 }
-            });
-        }, observerOptions);
-
-        sections.forEach(section => {
-            sectionObserver.observe(section);
+            }, 5000);
         });
     </script>
 </body>
